@@ -5,3 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+[['rich', 1000000], ['normal', 10000], ['poor', 100]].each do |name, balance|
+  User.create(name: name).wallets.build(balance: balance).save
+end
