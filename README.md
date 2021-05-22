@@ -41,7 +41,11 @@ bundle exec rails s -b 0.0.0.0 -p 3000
 
 | Header | Type | Required | Description |
 | :- | :- | :- | :- |
-| token | string | true  | auth token |
+| Authorization | string | true  | JWT |
+
+```
+Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
+```
 
 ### General response
 
@@ -63,7 +67,7 @@ bundle exec rails s -b 0.0.0.0 -p 3000
 
 ### Check Balance
 
-- URL: http://localhost:9000/api/v1/balance/:user_id
+- URL: http://localhost:9000/balance/:user_id
 - Type: GET
 
 - Response
@@ -83,7 +87,7 @@ bundle exec rails s -b 0.0.0.0 -p 3000
 
 ### Fund In
 
-- URL: http://localhost:9000/api/v1/fund_in
+- URL: http://localhost:9000/fund_in
 - Type: POST
 - Parameters
 
@@ -111,7 +115,7 @@ bundle exec rails s -b 0.0.0.0 -p 3000
 
 ### Fund Out
 
-- URL: http://localhost:9000/api/v1/fund_out
+- URL: http://localhost:9000/fund_out
 - Type: POST
 - Parameters
 
@@ -145,7 +149,7 @@ bundle exec rails s -b 0.0.0.0 -p 3000
 
 ### Transfer
 
-- URL: http://localhost:9000/api/v1/transfer
+- URL: http://localhost:9000/transfer
 - Type: POST
 - Parameters
 
@@ -180,7 +184,7 @@ bundle exec rails s -b 0.0.0.0 -p 3000
 
 ### Authorize Pay
 
-- URL: http://localhost:9000/api/v1/authorize_pay
+- URL: http://localhost:9000/authorize_pay
 - Type: POST
 - Parameters
 

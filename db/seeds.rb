@@ -7,5 +7,5 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 [['rich', 1000000], ['normal', 10000], ['poor', 100]].each do |name, balance|
-  User.create(name: name).wallets.build(balance: balance).save
+  User.create(name: name).wallet.build(balance: balance).save
 end
