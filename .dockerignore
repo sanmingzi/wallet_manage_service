@@ -5,3 +5,4 @@ docker
 log/*.log
 tmp/*
 .browserslistrc
+.env

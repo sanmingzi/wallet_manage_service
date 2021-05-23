@@ -46,4 +46,5 @@ services:
       DISABLE_DATABASE_ENVIRONMENT_CHECK: '1'
       RAILS_SERVE_STATIC_FILES: 'true'
       WMS_SERVICE_DATABASE_URL: "${WMS_SERVICE_DATABASE_URL}"
+      SECRET_KEY_BASE: "${SECRET_KEY_BASE}"
     command: bundle exec rails s -b 0.0.0.0 -p 9000

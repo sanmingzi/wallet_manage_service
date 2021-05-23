@@ -39,9 +39,10 @@ bundle exec rails s -b 0.0.0.0 -p 9000
 
 ```sh
 # payload = {user_id: 1}
+# Rails.application.secret_key_base = 's3cr3t'
 # JsonWebToken.encode(payload)
-# If you want to test apis, you should add the next to request header
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjI2NTA2MjF9.UKHk2HFMrIbf38Bb67PK_O7_kHYucSHnp9qkYSa-pe8
+# If you want to test apis, you should add the next to request headers
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjI2NjE2NTd9.az6zUY7mCV0DIysC00LZsXsWSUJAdw3WkvD7I75MmFI
 ```
 
 ### General response
