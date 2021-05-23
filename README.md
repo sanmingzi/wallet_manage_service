@@ -94,7 +94,7 @@ Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
 | Parameter | Type | Required | Description |
 | :- | :- | :- | :- |
 | user_id | string | true | user id |
-| fund | string | true | amount of fund |
+| amount | string | true | amount of fund |
 
 - Response
 
@@ -122,21 +122,21 @@ Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
 | Parameter | Type | Required | Description |
 | :- | :- | :- | :- |
 | user_id | string | true | user id |
-| fund | string | true | amount of fund |
+| amount | string | true | amount of fund |
 
 - Response
 
 | Field | Type |
 | :- | :- |
 | code | int |
-| fund_transaction_id | string |
+| transaction_id | bigint |
 | balance | float |
 
 ```json
 // success
 {
   "code": 0,
-  "fund_transaction_id": "xxx",
+  "transaction_id": 1,
   "balance": 100.00
 }
 
@@ -164,14 +164,14 @@ Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
 | Field | Type |
 | :- | :- |
 | code | int |
-| fund_transaction_id | string |
+| transaction_id | bigint |
 | balance | float |
 
 ```json
 // success
 {
   "code": 0,
-  "fund_transaction_id": "xxx",
+  "transaction_id": 1,
   "balance": 0.00
 }
 

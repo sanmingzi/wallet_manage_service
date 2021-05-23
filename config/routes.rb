@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'balance/:user_id', to: 'wallets#balance'
+      post 'fund_in', to: 'funds#fund_in'
     end
   end
 end

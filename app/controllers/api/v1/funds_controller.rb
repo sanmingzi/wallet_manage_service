@@ -2,14 +2,9 @@ module Api
   module V1
     class FundsController < ApplicationController
       def fund_in
-        # wallet = User.find(user_id).wallet
-        # transaction = nil
-        # transaction do
-        #   wallet.fund_in(fund)
-        #   transaction = FundInTransaction.new()
-        #   # FundTransaction.create
-        # end
-        # render json: {code: 0, balance: wallet.balance, transaction_id: }
+        wallet = User.find(user_id).wallet
+        transact = wallet.fund_in(amount)
+        render json: {code: 0, balance: wallet.balance, transaction_id: transact.id}
       end
 
       def fund_out
@@ -23,8 +18,8 @@ module Api
           params[:user_id]
         end
 
-        def fund
-          params[:fund]
+        def amount
+          params[:amount].to_i
         end
     end
   end
