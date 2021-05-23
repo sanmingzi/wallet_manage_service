@@ -22,8 +22,6 @@ class ApplicationController < ActionController::API
   private
     def set_current_user
       @current_user ||= (current_user_id && User.find(current_user_id))
-      @current_user ||= User.first
-      # Rails.logger.info "current_user: #{@current_user.inspect}"
     end
 
     def authenticate!

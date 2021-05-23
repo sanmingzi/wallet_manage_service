@@ -1,17 +1,5 @@
 require 'rails_helper'
 
-def auth_header
-  {'Authorization' => auth_token}
-end
-
-def auth_token(user = User.first)
-  payload = {
-    user_id: user.id
-  }
-  token = JsonWebToken.encode(payload)
-  "Bearer #{token}"
-end
-
 RSpec.describe 'Wallets API', type: :request do
   it 'get balance success' do
     user = create(:user, name: 'rich')

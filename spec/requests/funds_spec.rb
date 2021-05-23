@@ -1,24 +1,6 @@
 require 'rails_helper'
 
-def concurrence(thread_number, counts, &block)
-  threads = []
-  thread_number.times {
-    threads << Thread.new { counts.times(&block) }
-  }
-  threads.each { |thread| thread.join }
-end
-
-def auth_header
-  {'Authorization': auth_token}
-end
-
-def auth_token(user = User.first)
-  payload = {
-    user_id: user.id
-  }
-  token = JsonWebToken.encode(payload)
-  "Bearer #{token}"
-end
+include FundsHelper
 
 RSpec.describe 'Funds API', type: :request do
   shared_context "prepare user and wallet" do
@@ -29,27 +11,8 @@ RSpec.describe 'Funds API', type: :request do
     }
   end
 
-  def get_response
-    result = JSON.parse response.body
-    transaction_id = result['transaction_id']
-    transact = FundTransaction.find(transaction_id)
-    [result, transact]
-  end
-
-  def check_balance(wallet, balance)
-    wallet.reload
-    expect(wallet.balance).to eq balance
-  end
-
   describe 'fund in' do
     include_context 'prepare user and wallet'
-
-    def fund_in
-      # post "/api/v1/fund_in", params: {amount: @amount, user_id: @user.id}, headers: auth_header
-      headers = { "ACCEPT" => "application/json", "Authorization" => "foo" }
-      # post "/api/v1/fund_in", params: {amount: @amount, user_id: @user.id}, headers: headers
-      post "/api/v1/fund_in", :params => { amount: @amount, user_id: @user.id }, :headers => headers
-    end
 
     it 'success' do
       fund_in
@@ -76,10 +39,6 @@ RSpec.describe 'Funds API', type: :request do
 
   describe 'fund out' do
     include_context 'prepare user and wallet'
-
-    def fund_out
-      post "/api/v1/fund_out", params: {amount: @amount, user_id: @user.id}, headers: auth_header
-    end
 
     it 'success' do
       fund_out
@@ -122,10 +81,6 @@ RSpec.describe 'Funds API', type: :request do
       @in_user = create(:user, name: 'transfer_in')
       @in_wallet = create(:wallet, user: @in_user, balance: 1000000)
     }
-
-    def transfer
-      post "/api/v1/transfer", params: {amount: @amount, out_user_id: @user.id, in_user_id: @in_user.id}, headers: auth_header
-    end
 
     it 'success' do
       transfer
