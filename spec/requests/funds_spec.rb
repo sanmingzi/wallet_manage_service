@@ -63,8 +63,7 @@ RSpec.describe 'Funds API', type: :request do
     end
 
     it 'concurrence' do
-      # TODO
-      thread_number, counts = 1, 10
+      thread_number, counts = 30, 10
       total_counts = thread_number * counts
       concurrence(thread_number, counts) { fund_out }
       origin_balance = @wallet.balance
@@ -107,8 +106,7 @@ RSpec.describe 'Funds API', type: :request do
     end
 
     it 'concurrence' do
-      # TODO
-      thread_number, counts = 1, 10
+      thread_number, counts = 30, 10
       total_counts = thread_number * counts
       concurrence(thread_number, counts) { transfer }
       check_balance(@wallet, @wallet.balance - @amount * total_counts)
