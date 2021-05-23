@@ -16,6 +16,7 @@ Linux version 5.4.72-microsoft-standard-WSL2 (oe-user@oe-host) (gcc version 8.2.
 # depend on a visited mysql
 # url: mysql2://root:root@127.0.0.1
 
+source .env
 bundle install --path vendor/bundle
 bundle exec rails db:create
 bundle exec rails db:migrate
@@ -26,7 +27,10 @@ bundle exec rails s -b 0.0.0.0 -p 9000
 - run app in docker container
 
 ```sh
-# TODO
+cd docker
+docker-compose build wms_service_db_setup
+docker-compose up wms_service_db_setup
+docker-compose up wms_service
 ```
 
 ## API
@@ -45,7 +49,7 @@ bundle exec rails s -b 0.0.0.0 -p 9000
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjI2NjE2NTd9.az6zUY7mCV0DIysC00LZsXsWSUJAdw3WkvD7I75MmFI
 ```
 
-### General response
+### General Response
 
 - Not authenticated
 
@@ -99,14 +103,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjI2NjE2N
 | Field | Type |
 | :- | :- |
 | code | int |
-| fund_transaction_id | string |
+| transaction_id | string |
 | balance | float |
 
 ```json
 // success
 {
   "code": 0,
-  "fund_transaction_id": "xxx",
+  "transaction_id": 1,
   "balance": 100.00
 }
 ```
