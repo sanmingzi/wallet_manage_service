@@ -1,0 +1,7 @@
+.vscode
+docker
+.dockerignore
+.git*
+log/*.log
+tmp/*
+.browserslistrc

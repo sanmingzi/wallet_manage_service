@@ -1,0 +1,49 @@
+version: '3.4'
+
+services:
+  # docker-compose build wms_service_db_setup
+  # docker-compose up wms_service_db_setup
+  wms_service_db_setup:
+    build:
+      context: ../
+      network: host
+      dockerfile: ./docker/Dockerfile
+    image: "${IMAGE_NAME}:${TAG}"
+    container_name: "wms_service_db_setup_${TAG}"
+    network_mode: host
+    environment:
+      RAILS_ENV: "${RAILS_ENV}"
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: '1'
+      WMS_SERVICE_DATABASE_URL: "${WMS_SERVICE_DATABASE_URL}"
+    working_dir: /workspace/wallet_manage_service
+    command: /bin/sh -c "bundle exec rails db:setup"
+
+  # docker-compose up wms_service_db_reset
+  wms_service_db_reset:
+    image: "${IMAGE_NAME}:${TAG}"
+    container_name: "wms_service_db_reset_${TAG}"
+    network_mode: host
+    environment:
+      RAILS_ENV: "${RAILS_ENV}"
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: '1'
+      WMS_SERVICE_DATABASE_URL: "${WMS_SERVICE_DATABASE_URL}"
+    working_dir: /workspace/wallet_manage_service
+    command: /bin/sh -c "bundle exec rails db:reset"
+
+  # docker-compose up -d wms_service
+  wms_service:
+    build:
+      context: ../
+      network: host
+      dockerfile: ./docker/Dockerfile
+    image: "${IMAGE_NAME}:${TAG}"
+    container_name: "wms_service_${TAG}"
+    restart: always
+    network_mode: host
+    environment:
+      RAILS_ENV: "${RAILS_ENV}"
+      RAILS_LOG_TO_STDOUT: 'true'
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: '1'
+      RAILS_SERVE_STATIC_FILES: 'true'
+      WMS_SERVICE_DATABASE_URL: "${WMS_SERVICE_DATABASE_URL}"
+    command: bundle exec rails s -b 0.0.0.0 -p 9000

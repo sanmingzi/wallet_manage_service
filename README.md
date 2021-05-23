@@ -20,16 +20,10 @@ bundle install --path vendor/bundle
 bundle exec rails db:create
 bundle exec rails db:migrate
 bundle exec rails db:seed
-bundle exec rails s -b 0.0.0.0 -p 3000
+bundle exec rails s -b 0.0.0.0 -p 9000
 ```
 
 - run app in docker container
-
-```sh
-# TODO
-```
-
-## How to run test case
 
 ```sh
 # TODO
@@ -43,8 +37,11 @@ bundle exec rails s -b 0.0.0.0 -p 3000
 | :- | :- | :- | :- |
 | Authorization | string | true  | JWT |
 
-```
-Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
+```sh
+# payload = {user_id: 1}
+# JsonWebToken.encode(payload)
+# If you want to test apis, you should add the next to request header
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjI2NTA2MjF9.UKHk2HFMrIbf38Bb67PK_O7_kHYucSHnp9qkYSa-pe8
 ```
 
 ### General response
@@ -181,41 +178,3 @@ Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
   "balance": 90.00
 }
 ```
-
-### Authorize Pay
-
-- URL: http://localhost:9000/authorize_pay
-- Type: POST
-- Parameters
-
-| Parameter | Type | Required | Description |
-| :- | :- | :- | :- |
-| user_id | string | true | user id |
-
-- Response
-
-| Field | Type |
-| :- | :- |
-| code | int |
-| wallet_id | string |
-
-```json
-// success
-{
-  "code": 0,
-  "wallet_id": "fjsdkfasfourw2032z93jf"
-}
-
-// authorized already
-{
-  "code": 1,
-  "wallet_id": "fjsdkfasfourw2032z93jf"
-}
-```
-
-## Database
-
-- users
-- wallets
-- fund_transactions
-- audit_logs

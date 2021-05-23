@@ -54,4 +54,4 @@ production:
   # database: wallet_manage_service_production
   # username: wallet_manage_service
   # password: <%= ENV['WALLET_MANAGE_SERVICE_DATABASE_PASSWORD'] %>
-  url: mysql2://root:root@127.0.0.1/wms_production
+  url: <%= ENV['WMS_SERVICE_DATABASE_URL'] %>
