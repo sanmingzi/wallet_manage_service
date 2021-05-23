@@ -21,36 +21,32 @@ def auth_token(user = User.first)
 end
 
 RSpec.describe 'Funds API', type: :request do
-  def check_balance(wallet, balance)
-    wallet.reload
-    expect(wallet.balance).to eq balance
-  end
-
   shared_context "prepare user and wallet" do
     before {
       @user = create(:user, name: 'rich')
       @wallet = create(:wallet, user: @user, balance: 1000000)
       @amount = 100
     }
+  end
 
-    def fund_in
-      post "/api/v1/fund_in", params: {amount: @amount, user_id: @user.id}, headers: auth_header
-    end
+  def get_response
+    result = JSON.parse response.body
+    transaction_id = result['transaction_id']
+    transact = FundTransaction.find(transaction_id)
+    [result, transact]
+  end
 
-    def fund_out
-      post "/api/v1/fund_out", params: {amount: @amount, user_id: @user.id}, headers: auth_header
-    end
-
-    def get_response
-      result = JSON.parse response.body
-      transaction_id = result['transaction_id']
-      transact = FundTransaction.find(transaction_id)
-      [result, transact]
-    end
+  def check_balance(wallet, balance)
+    wallet.reload
+    expect(wallet.balance).to eq balance
   end
 
   describe 'fund in' do
     include_context 'prepare user and wallet'
+
+    def fund_in
+      post "/api/v1/fund_in", params: {amount: @amount, user_id: @user.id}, headers: auth_header
+    end
 
     it 'success' do
       fund_in
@@ -78,6 +74,10 @@ RSpec.describe 'Funds API', type: :request do
   describe 'fund out' do
     include_context 'prepare user and wallet'
 
+    def fund_out
+      post "/api/v1/fund_out", params: {amount: @amount, user_id: @user.id}, headers: auth_header
+    end
+
     it 'success' do
       fund_out
       result, transact = get_response
@@ -89,7 +89,7 @@ RSpec.describe 'Funds API', type: :request do
       expect(transact.status).to eq 'success'
     end
 
-    it 'not enough fund' do
+    it 'not sufficient funds' do
       @amount = @wallet.balance + 100
       fund_out
       result = JSON.parse response.body
@@ -138,7 +138,7 @@ RSpec.describe 'Funds API', type: :request do
       check_balance(@in_wallet, @in_wallet.balance + @amount)
     end
 
-    it 'not enough fund' do
+    it 'not sufficient funds' do
       @amount = @wallet.balance + 100
       transfer
       result = JSON.parse response.body
