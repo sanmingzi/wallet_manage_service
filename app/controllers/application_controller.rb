@@ -3,12 +3,13 @@ class ApplicationController < ActionController::API
 
   include ActionController::Helpers
 
-  # before_action :set_current_user
-  # before_action :authenticate!
+  before_action :set_current_user
+  before_action :authenticate!
 
   helper_method :current_user, :authenticated?
 
   rescue_from AuthenticateError, with: :not_authenticated
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def current_user
     @current_user
@@ -22,7 +23,7 @@ class ApplicationController < ActionController::API
     def set_current_user
       @current_user ||= (current_user_id && User.find(current_user_id))
       @current_user ||= User.first
-      Rails.logger.info "current_user: #{@current_user.inspect}"
+      # Rails.logger.info "current_user: #{@current_user.inspect}"
     end
 
     def authenticate!
@@ -33,15 +34,14 @@ class ApplicationController < ActionController::API
     end
 
     def auth_header
-      if headers['Authorization'].present?
-        headers['Authorization'].split(' ').last
-      else
-        ''
-      end
+      request.headers['Authorization']
     end
 
     def decoded_auth_token
-      @decoded_auth_token ||= JsonWebToken.decode(auth_header)
+      if auth_header
+        token = auth_header.split(' ').last
+        @decoded_auth_token ||= JsonWebToken.decode(token)
+      end
     end
 
     def current_user_id
@@ -49,6 +49,10 @@ class ApplicationController < ActionController::API
     end
 
     def not_authenticated
-      render json: {code: 401}
+      render json: {code: 401}, status: :unauthorized
+    end
+
+    def record_not_found
+      render json: {code: 404}, status: :not_found
     end
 end

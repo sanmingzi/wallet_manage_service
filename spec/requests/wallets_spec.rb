@@ -13,13 +13,6 @@ def auth_token(user = User.first)
 end
 
 RSpec.describe 'Wallets API', type: :request do
-  # it 'authenticate failed' do
-  #   get '/api/v1/balance/1'
-  #   result = JSON.parse response.body
-  #   expect(response).to have_http_status(:success)
-  #   expect(result["code"]).to eq 401
-  # end
-
   it 'get balance success' do
     user = create(:user, name: 'rich')
     wallet = create(:wallet, user: user, balance: 10000)

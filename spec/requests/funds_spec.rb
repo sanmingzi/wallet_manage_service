@@ -9,7 +9,7 @@ def concurrence(thread_number, counts, &block)
 end
 
 def auth_header
-  {'Authorization' => auth_token}
+  {'Authorization': auth_token}
 end
 
 def auth_token(user = User.first)
@@ -45,7 +45,10 @@ RSpec.describe 'Funds API', type: :request do
     include_context 'prepare user and wallet'
 
     def fund_in
-      post "/api/v1/fund_in", params: {amount: @amount, user_id: @user.id}, headers: auth_header
+      # post "/api/v1/fund_in", params: {amount: @amount, user_id: @user.id}, headers: auth_header
+      headers = { "ACCEPT" => "application/json", "Authorization" => "foo" }
+      # post "/api/v1/fund_in", params: {amount: @amount, user_id: @user.id}, headers: headers
+      post "/api/v1/fund_in", :params => { amount: @amount, user_id: @user.id }, :headers => headers
     end
 
     it 'success' do
