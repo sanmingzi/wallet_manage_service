@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2021_05_22_115339) do
 
   create_table "wallets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.decimal "balance", precision: 63, scale: 4, default: "0.0", null: false
+    t.decimal "balance", precision: 63, scale: 4, default: "0.0", null: false, unsigned: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_wallets_on_user_id"

@@ -8,6 +8,12 @@ module Api
       end
 
       def fund_out
+        wallet = User.find(user_id).wallet
+        if transact = wallet.fund_out(amount)
+          render json: {code: 0, balance: wallet.balance, transaction_id: transact.id}
+        else
+          render json: {code: 1, balance: wallet.balance}
+        end
       end
 
       def transfer
