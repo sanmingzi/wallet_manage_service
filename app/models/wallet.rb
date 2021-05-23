@@ -18,7 +18,6 @@ class Wallet < ApplicationRecord
   end
 
   def fund_out(amount)
-    Rails.logger.info "amount: #{amount}, balance: #{self.balance}"
     transact = nil
     transaction do
       self.decrement!(:balance, amount)
@@ -33,7 +32,28 @@ class Wallet < ApplicationRecord
   rescue ActiveRecord::RangeError => e
     self.reload
     Rails.logger.info "error_message: #{e.message}"
-    Rails.logger.info "message: not sufficient funds, balance: #{self.balance}, amount: #{amount}"
+    Rails.logger.info "message: not sufficient funds for fund_out, balance: #{self.balance}, amount: #{amount}"
+    nil
+  end
+
+  def transfer(in_wallet, amount)
+    transact = nil
+    transaction do
+      self.decrement!(:balance, amount)
+      in_wallet.increment!(:balance, amount)
+      transact = FundTransaction.create!(
+        amount: amount,
+        fund_type: 'transfer',
+        out_wallet_id: self.id,
+        in_wallet_id: in_wallet.id,
+        status: 'success'
+      )
+    end
+    transact
+  rescue ActiveRecord::RangeError => e
+    self.reload
+    Rails.logger.info "error_message: #{e.message}"
+    Rails.logger.info "message: not sufficient funds for transfer, balance: #{self.balance}, amount: #{amount}"
     nil
   end
 end

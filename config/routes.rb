@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get 'balance/:user_id', to: 'wallets#balance'
       post 'fund_in', to: 'funds#fund_in'
       post 'fund_out', to: 'funds#fund_out'
+      post 'transfer', to: 'funds#transfer'
     end
   end
 end

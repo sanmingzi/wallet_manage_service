@@ -155,17 +155,17 @@ Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l
 
 | Parameter | Type | Required | Description |
 | :- | :- | :- | :- |
-| user_id | string | true | user id for fund out |
-| target | string | true | user id for fund in |
-| fund | float | true | amount of fund |
+| out_user_id | string | true | user id for fund out |
+| in_user_id | string | true | user id for fund in |
+| amount | float | true | amount of fund |
 
 - Response
 
-| Field | Type |
-| :- | :- |
+| Field | Type | Description |
+| :- | :- | :- |
 | code | int |
 | transaction_id | bigint |
-| balance | float |
+| balance | float | balance for fund out user |
 
 ```json
 // success

@@ -17,6 +17,13 @@ module Api
       end
 
       def transfer
+        out_wallet = User.find(out_user_id).wallet
+        in_wallet = User.find(in_user_id).wallet
+        if transact = out_wallet.transfer(in_wallet, amount)
+          render json: {code: 0, balance: out_wallet.balance, transaction_id: transact.id}
+        else
+          render json: {code: 1, balance: out_wallet.balance}
+        end
       end
 
       private
@@ -26,6 +33,14 @@ module Api
 
         def amount
           params[:amount].to_i
+        end
+
+        def out_user_id
+          params[:out_user_id]
+        end
+
+        def in_user_id
+          params[:in_user_id]
         end
     end
   end
