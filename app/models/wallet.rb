@@ -18,38 +18,41 @@ class Wallet < ApplicationRecord
   end
 
   def fund_out(amount)
-    transact = nil
-    transaction do
-      self.decrement!(:balance, amount)
-      transact = FundTransaction.create!(
-        amount: amount,
-        fund_type: 'fund_out',
-        out_wallet_id: self.id,
-        status: 'success'
-      )
-    end
-    transact
-  rescue ActiveRecord::RangeError => e
-    self.reload
-    Rails.logger.info "error_message: #{e.message}"
-    Rails.logger.info "message: not sufficient funds for fund_out, balance: #{self.balance}, amount: #{amount}"
-    nil
+    rescue_range_error(amount) {
+      transact = nil
+      transaction do
+        self.decrement!(:balance, amount)
+        transact = FundTransaction.create!(
+          amount: amount,
+          fund_type: 'fund_out',
+          out_wallet_id: self.id,
+          status: 'success'
+        )
+      end
+      transact
+    }
   end
 
   def transfer(in_wallet, amount)
-    transact = nil
-    transaction do
-      self.decrement!(:balance, amount)
-      in_wallet.increment!(:balance, amount)
-      transact = FundTransaction.create!(
-        amount: amount,
-        fund_type: 'transfer',
-        out_wallet_id: self.id,
-        in_wallet_id: in_wallet.id,
-        status: 'success'
-      )
-    end
-    transact
+    rescue_range_error(amount) {
+      transact = nil
+      transaction do
+        self.decrement!(:balance, amount)
+        in_wallet.increment!(:balance, amount)
+        transact = FundTransaction.create!(
+          amount: amount,
+          fund_type: 'transfer',
+          out_wallet_id: self.id,
+          in_wallet_id: in_wallet.id,
+          status: 'success'
+        )
+      end
+      transact
+    }
+  end
+
+  def rescue_range_error(amount)
+    yield
   rescue ActiveRecord::RangeError => e
     self.reload
     Rails.logger.info "error_message: #{e.message}"
